@@ -53,6 +53,10 @@ cc.Class({
         _presentRound:0,
         _totalRound:0,
         
+        _positionX:0,
+        _positionY:0,
+        
+        _gamePlayDuration:1,
     },
 
     // use this for initialization
@@ -103,12 +107,14 @@ cc.Class({
         this._HP2=this._roundData[5];
         this._presentRound=this._roundData[6];
         this._totalRound=this._roundData[7];
-
+        
+        this._positionX=this.players[this._attackerFlag].getPositionX();
+        this._positionY=this.players[this._attackerFlag].getPositionY();
     },
     
     _gamePlay:function(){
         this.players[this._attackerFlag].getComponent(cc.Sprite).spriteFrame=this.actions.getSpriteFrame('attack-normal');
-        this.players[this._attackerFlag].runAction(cc.moveTo(0.1,(0.5-this._attackerFlag)*100,-320));
+        this.players[this._attackerFlag].runAction(cc.moveTo(0.1,(0.5-this._attackerFlag)*100,this._positionY));
         this.players[1-this._attackerFlag].getComponent(cc.Sprite).spriteFrame=this.actions.getSpriteFrame('beat');
         this.damageDisplayer[this._attackerFlag].node.opacity=0;
         this.damageDisplayer[1-this._attackerFlag].node.opacity=255;
@@ -116,12 +122,15 @@ cc.Class({
         this.hpDisplayer1.progress=this._HP1/1000;
         this.hpDisplayer2.progress=this._HP2/1000;
         this.roundDispalyer.string=this._presentRound.toString();
+        this.scheduleOnce(function(){
+            this._return();
+        },this._gamePlayDuration);
     },
     
     _return:function(){
         this.players[0].getComponent(cc.Sprite).spriteFrame=this.actions.getSpriteFrame('idle');
         this.players[1].getComponent(cc.Sprite).spriteFrame=this.actions.getSpriteFrame('idle');
-        this.players[this._attackerFlag].runAction(cc.moveTo(0.1,(0.5-this._attackerFlag)*-500,-320));
+        this.players[this._attackerFlag].runAction(cc.moveTo(0.1,this._positionX,this._positionY));
         this.damageDisplayer[0].node.opacity=0;
         this.damageDisplayer[1].node.opacity=0;
     },
