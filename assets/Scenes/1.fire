@@ -1405,7 +1405,7 @@
     "groupIndex": 0
   },
   {
-    "__type__": "0d7b8DrqwZLULRUhtnwYEpl",
+    "__type__": "89d55b+ueJOgZqws+BjIhn+",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -1472,8 +1472,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 452,
-      "y": 105
+      "x": 593,
+      "y": 135
     },
     "_skewX": 0,
     "_skewY": 0,
