@@ -11,6 +11,10 @@ if (!cc.runtime) {
                 default: null,
                 type: cc.Label
             },
+            resulter: {
+                default: null,
+                type: cc.Label
+            },
         },
 
         session: null,
@@ -25,7 +29,6 @@ if (!cc.runtime) {
             var volumeEvent = (function() {
                 var lastVolume = 0;
                 var eventId = 0;
-
                 var listen = function(volume) {
                     lastVolume = volume;
                 };
@@ -48,11 +51,11 @@ if (!cc.runtime) {
                         if (err == null || err == undefined || err == 0) {
                             if (result == '' || result == null)
                                 //alert("没有获取到识别结果");
-                                _this.tester.string = "没有获取到识别结果"
+                                _this.tester.string = "没有获取到识别结果";
                             else{
                                 //alert(result.toString());
                                 _this.tester.string = result.toString();
-                                this._show(result);
+                                _this._show(result);
                             }
                         } else {
                             alert(err.toString() + result.toString());
@@ -95,6 +98,10 @@ if (!cc.runtime) {
                     this._record();
                 }, this);
             }
+            
+            this.node.on('playerExchange',function(event){
+                _this._record(); 
+            }, this);        
         },
 
         _record: function() {
@@ -102,22 +109,19 @@ if (!cc.runtime) {
                 "grammar_list": null,
                 "params": "appid=583a97de,appidkey=5417118c65059796, lang = sms, acous = anhui, aue=speex-wb;-1, usr = mkchen, ssm = 1, sub = iat, net_type = wifi, rse = utf8, ent =sms16k, rst = plain, auf  = audio/L16;rate=16000, vad_enable = 1, vad_timeout = 5000, vad_speech_tail = 500, compress = igzip"
             };
-
-            //alert("按下";
-            //alert(ssb_param.toString();
             this.session.start(ssb_param);
         },
         
         _show: function(result) {
             this._result = result.toString();
-            this.tester.string = this._result;
+            this.resulter.string = this._result;
+            this.node.dispatchEvent( new cc.Event.EventCustom('getResult', true) );
         },
 
 
 
         // called every frame, uncomment this function to activate update callback
-        // update: function (dt) {
-
-        // },
+        //update: function (dt) {
+        //},
     });
 }
